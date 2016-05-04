@@ -2,6 +2,8 @@ package com.epicodus.whatsappening.models;
 
 import org.parceler.Parcel;
 
+import java.util.Date;
+
 /**
  * Created by Guest on 5/4/16.
  */
@@ -11,6 +13,7 @@ public class Message {
     public String sender;
     public String getter;
     public String id;
+    public Date dateCreated;
 
     public Message() {}
 
@@ -18,6 +21,7 @@ public class Message {
         this.body = body;
         this.sender = sender;
         this.getter = getter;
+        this.dateCreated = new Date();
     }
 
     public String getGetter() {
@@ -38,5 +42,9 @@ public class Message {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Date getDate() {
+        return dateCreated;
     }
 }
