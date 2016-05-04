@@ -3,13 +3,13 @@ package com.epicodus.whatsappening.models;
 /**
  * Created by Guest on 5/4/16.
  */
-public class User {
+public class Friend {
     private String name;
     private String email;
 
-    public User() {}
+    public Friend() {}
 
-    public User(String name, String email) {
+    public Friend(String name, String email) {
         this.name = name;
         this.email = email;
     }
