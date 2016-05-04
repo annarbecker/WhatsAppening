@@ -1,12 +1,16 @@
 package com.epicodus.whatsappening.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.epicodus.whatsappening.R;
 import com.epicodus.whatsappening.models.Friend;
+import com.epicodus.whatsappening.ui.ChatActivity;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -27,13 +31,14 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
         mContext = itemView.getContext();
         mFriends = friends;
         itemView.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                //int itemPosition = getLayoutPosition();
-//                Intent intent = new Intent(mContext, );
-//                intent.putExtra("position", itemPosition + "");
-//                intent.putExtra("restaurants", Parcels.wrap(mRestaurants));
-//                mContext.startActivity(intent);
+                int itemPosition = getLayoutPosition();
+                Intent intent = new Intent(mContext, ChatActivity.class);
+                Friend friend = mFriends.get(itemPosition);
+                intent.putExtra("friend", Parcels.wrap(friend));
+                mContext.startActivity(intent);
             }
         });
     }
