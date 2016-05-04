@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.CreateAccountActivity">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Whats App"
+            android:text="Sign App"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:textSize="30sp"
@@ -33,6 +33,27 @@
             android:layout_gravity="bottom" />
     </LinearLayout>
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/nameEditText"
+        android:layout_marginTop="93dp"
+        android:hint="name"
+        android:gravity="center"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/signAppEmailEditText"
+        android:hint="email"
+        android:layout_below="@+id/nameEditText"
+        android:layout_alignLeft="@+id/nameEditText"
+        android:layout_alignStart="@+id/nameEditText"
+        android:gravity="center" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -45,44 +66,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Go!"
-            android:id="@+id/logInButton"
+            android:id="@+id/signAppButton"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:background="@color/colorAccent"
             android:textColor="@color/colorIcons"
             android:layout_marginRight="10dp"
             android:layout_weight="0.5" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sign App"
-            android:id="@+id/newUserButton"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@color/colorIcons"
-            android:layout_weight="0.5" />
     </LinearLayout>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/emailEditText"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="109dp"
+        android:id="@+id/signAppPasswordEditText"
+        android:layout_below="@+id/signAppEmailEditText"
+        android:layout_alignLeft="@+id/signAppEmailEditText"
+        android:layout_alignStart="@+id/signAppEmailEditText"
+        android:hint="password"
         android:gravity="center"
-        android:hint="email" />
+        android:inputType="textPassword" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/passwordEditText"
-        android:layout_below="@+id/emailEditText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:id="@+id/confirmPasswordEditText"
+        android:layout_below="@+id/signAppPasswordEditText"
+        android:layout_alignLeft="@+id/signAppPasswordEditText"
+        android:layout_alignStart="@+id/signAppPasswordEditText"
+        android:hint="confirm password"
         android:gravity="center"
-        android:hint="password"
         android:inputType="textPassword" />
-
 </RelativeLayout>
