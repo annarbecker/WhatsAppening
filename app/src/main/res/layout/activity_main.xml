@@ -44,45 +44,54 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Sign App"
+            android:id="@+id/newUserButton"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/colorIcons"
+            android:layout_weight="0.75"
+            android:layout_marginRight="10dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Go!"
             android:id="@+id/logInButton"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:background="@color/colorAccent"
             android:textColor="@color/colorIcons"
-            android:layout_marginRight="10dp"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.25" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sign App"
-            android:id="@+id/newUserButton"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@color/colorIcons"
-            android:layout_weight="0.5" />
+
     </LinearLayout>
 
-    <EditText
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/emailEditText"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="109dp"
-        android:gravity="center"
-        android:hint="email" />
+        android:layout_height="match_parent">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/passwordEditText"
-        android:layout_below="@+id/emailEditText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:gravity="center"
-        android:hint="password"
-        android:inputType="textPassword" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/emailEditText"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="109dp"
+            android:gravity="center"
+            android:hint="email"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/passwordEditText"
+            android:layout_below="@+id/emailEditText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:gravity="center"
+            android:hint="password"
+            android:inputType="textPassword" />
+    </LinearLayout>
 
 </RelativeLayout>
