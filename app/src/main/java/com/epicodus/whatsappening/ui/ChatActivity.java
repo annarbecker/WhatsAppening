@@ -14,7 +14,6 @@ import android.widget.EditText;
 
 import com.epicodus.whatsappening.Constants;
 import com.epicodus.whatsappening.R;
-import com.epicodus.whatsappening.adapters.FirebaseMessageListAdapter;
 import com.epicodus.whatsappening.adapters.MessageListAdapter;
 import com.epicodus.whatsappening.models.Friend;
 import com.epicodus.whatsappening.models.Message;
@@ -104,6 +103,8 @@ public class ChatActivity extends AppCompatActivity{
                             String getter = thisMap.get("getter").toString();
                             Log.d("sender getter", sender + " " + getter);
                             Message newMessage = new Message(body, sender, getter);
+                            String messageId = (String) thisMap.get("id");
+                            newMessage.setId(messageId);
                             messages.add(newMessage);
                         }
                     }
@@ -134,7 +135,20 @@ public class ChatActivity extends AppCompatActivity{
                             String getter = thisMap.get("getter").toString();
                             Log.d("sender getter", sender + " " + getter);
                             Message newMessage = new Message(body, sender, getter);
-                            messages.add(newMessage);
+                            String messageId = (String) thisMap.get("id");
+                            newMessage.setId(messageId);
+                            boolean contains = false;
+                            if(messages.size() > 0) {
+                                for(int j = 0; j < messages.size(); j++) {
+                                    Log.d("message", messages.get(j).getId());
+                                    if(messages.get(j).getId().equals(thisMap.get("id"))) {
+                                        contains = true;
+                                    }
+                                }
+                            }
+                            if(!contains) {
+                                messages.add(newMessage);
+                            }
                         }
                     }
                     Collections.sort(messages, new Comparator<Message>() {
@@ -158,4 +172,6 @@ public class ChatActivity extends AppCompatActivity{
         mMessageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMessageRecyclerView.setAdapter(mAdapter);
     }
+
+
 }

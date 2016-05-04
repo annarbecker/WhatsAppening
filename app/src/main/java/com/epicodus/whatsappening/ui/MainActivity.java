@@ -1,3 +1,20 @@
+/*ToDo
+on login have return key auto run login
+save functionality for sign up
+style friend list
+don't display users name in friend list
+in chat:
+    order messages by date
+    format sent and received messages
+    show user name
+    when message is sent hide keyboard and clear send message field
+    auto update in chat - real time, no refresh
+    back arrow to friends list
+    add logout to toolbar
+search widgit for searching friends
+in friends list have message preview
+*/
+
 package com.epicodus.whatsappening.ui;
 
 import android.content.Intent;
