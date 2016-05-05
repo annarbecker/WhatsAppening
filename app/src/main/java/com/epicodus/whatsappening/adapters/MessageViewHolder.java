@@ -37,9 +37,12 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     private String mCurrentFriend;
     private String userName;
 
+
     public MessageViewHolder(View itemView, ArrayList<Message> messages, String currentFriend) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+
+
         mContext = itemView.getContext();
         mMessages = messages;
         mCurrentFriend = currentFriend;
@@ -52,28 +55,17 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
         mMessageTextView.setText(message.getBody());
         mMessageTimeTextView.setText(message.getDate().toString());
-        mFriendNameTextView.setText(mCurrentFriend);
-        Log.d("UID", currentUserId);
-//        if(currentUserId.equals(message.getSender())) {
-//            Log.d("fire", message.getSender() + "    " + currentUserId);
-//            mMessageTextView.setGravity(Gravity.RIGHT);
-//            mMessageTimeTextView.setGravity(Gravity.RIGHT);
-//            mFriendNameTextView.setText(userName);
-//            mFriendNameTextView.setGravity(Gravity.RIGHT);
-//        }
+
+        if (currentUserId.equals(message.getSender())) {
+            mFriendNameTextView.setText(userName);
+            mMessageTextView.setGravity(Gravity.RIGHT);
+            mMessageTimeTextView.setGravity(Gravity.RIGHT);
+            mFriendNameTextView.setGravity(Gravity.RIGHT);
+        } else {
+            mMessageTextView.setGravity(Gravity.LEFT);
+            mMessageTimeTextView.setGravity(Gravity.LEFT);
+            mFriendNameTextView.setGravity(Gravity.LEFT);
+            mFriendNameTextView.setText(mCurrentFriend);
+        }
     }
-
-    public void bindMessageSender(Message message) {
-        Log.d("SENDER", message.getSender());
-        Log.d("GETTER", message.getGetter());
-
-        mMessageTextView.setText(message.getBody());
-        mMessageTimeTextView.setText(message.getDate().toString());
-        mFriendNameTextView.setText(mCurrentFriend);
-        mMessageTextView.setGravity(Gravity.RIGHT);
-        mMessageTimeTextView.setGravity(Gravity.RIGHT);
-        mFriendNameTextView.setText(userName);
-        mFriendNameTextView.setGravity(Gravity.RIGHT);
-    }
-
 }
