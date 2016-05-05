@@ -2,9 +2,6 @@
 style friend list w/ pictures?
 in chat:
     format sent and received messages
-    show user name
-    when message is sent hide keyboard and clear send message field
-    back arrow to friends list
     add logout to toolbar
 search widgit for searching friends
 in friends list have message preview

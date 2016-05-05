@@ -1,5 +1,6 @@
 package com.epicodus.whatsappening.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -9,7 +10,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.epicodus.whatsappening.Constants;
@@ -41,14 +46,12 @@ public class ChatActivity extends AppCompatActivity{
     EditText mMessageEditText;
     private SharedPreferences mSharedPreferences;
     private Friend currentFriend;
+
     private Firebase mMessagesRef;
     private String currentUserId;
-    private Query currentUserRef;
-    private Query friendRef;
     private MessageListAdapter mAdapter;
-    private ArrayList<Map> gotList = new ArrayList<>();
-    private ArrayList<Map> sentList = new ArrayList<>();
     private ArrayList<Message> messages = new ArrayList<>();
+    private Firebase mFirebaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,8 @@ public class ChatActivity extends AppCompatActivity{
         currentFriend = Parcels.unwrap(intent.getParcelableExtra("friend"));
         currentUserId = mSharedPreferences.getString(Constants.KEY_UID, null);
         Log.d("Current User: ", currentUserId);
+        mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
+
         mMessageEditText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if(event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -74,6 +79,9 @@ public class ChatActivity extends AppCompatActivity{
                             String pushId = messageFirebaseRef.getKey();
                             newMessage.setId(pushId);
                             messageFirebaseRef.setValue(newMessage);
+                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(mMessageEditText.getWindowToken(), 0);
+                            mMessageEditText.setText("");
                             return true;
                         default:
                             break;
@@ -129,17 +137,39 @@ public class ChatActivity extends AppCompatActivity{
     }
 
     private void setUpRecyclerView() {
-        ChatActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter = new MessageListAdapter(getApplicationContext(), messages);
-                mMessageRecyclerView.setAdapter(mAdapter);
-                mMessageRecyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
-                mMessageRecyclerView.setHasFixedSize(true);
-            }
-        });
-
+        mAdapter = new MessageListAdapter(getApplicationContext(), messages, currentFriend.getName());
+        mMessageRecyclerView.setAdapter(mAdapter);
+        mMessageRecyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+        mMessageRecyclerView.setHasFixedSize(true);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_logout) {
+            logout();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    protected void logout() {
+        mFirebaseRef.unauth();
+        takeUserToLoginScreenOnUnAuth();
+    }
+
+    private void takeUserToLoginScreenOnUnAuth() {
+        Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
 
 }

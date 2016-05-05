@@ -2,10 +2,14 @@ package com.epicodus.whatsappening.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.epicodus.whatsappening.Constants;
 import com.epicodus.whatsappening.R;
 import com.epicodus.whatsappening.models.Message;
 import com.epicodus.whatsappening.ui.ChatActivity;
@@ -22,19 +26,36 @@ import butterknife.ButterKnife;
  */
 public class MessageViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.messageTextView) TextView mMessageTextView;
+    @Bind(R.id.messageTimeTextView) TextView mMessageTimeTextView;
+    @Bind(R.id.friendNameTextView) TextView mFriendNameTextView;
+
     private Context mContext;
     private ArrayList<Message> mMessages = new ArrayList<>();
+    private SharedPreferences mSharedPreferences;
+    private String currentUserId;
+    private String mCurrentFriend;
+    private String userName;
 
-    public MessageViewHolder(View itemView, ArrayList<Message> messages) {
+    public MessageViewHolder(View itemView, ArrayList<Message> messages, String currentFriend) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
         mMessages = messages;
-
+        mCurrentFriend = currentFriend;
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        currentUserId = mSharedPreferences.getString(Constants.KEY_UID, null);
+        userName = mSharedPreferences.getString("name", null);
     }
 
     public void bindMessage(Message message) {
-
         mMessageTextView.setText(message.getBody());
+        mMessageTimeTextView.setText(message.getDate().toString());
+        mFriendNameTextView.setText(mCurrentFriend);
+        if(currentUserId.equals(message.getSender())) {
+            mMessageTextView.setGravity(Gravity.RIGHT);
+            mMessageTimeTextView.setGravity(Gravity.RIGHT);
+            mFriendNameTextView.setText(userName);
+            mFriendNameTextView.setGravity(Gravity.RIGHT);
+        }
     }
 }

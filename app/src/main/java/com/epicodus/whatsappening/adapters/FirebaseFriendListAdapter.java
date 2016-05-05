@@ -18,6 +18,7 @@ import com.firebase.client.Query;
 public class FirebaseFriendListAdapter extends FirebaseRecyclerAdapter<FriendViewHolder, Friend> {
     private SharedPreferences mSharedPreferences;
     private String currentUserId;
+    private SharedPreferences.Editor mSharedPreferencesEditor;
 
 
     public FirebaseFriendListAdapter(Query query, Class<Friend> itemClass) {
@@ -30,6 +31,7 @@ public class FirebaseFriendListAdapter extends FirebaseRecyclerAdapter<FriendVie
                 .inflate(R.layout.friend_list_item, parent, false);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
         currentUserId = mSharedPreferences.getString(Constants.KEY_UID, null);
+        mSharedPreferencesEditor = mSharedPreferences.edit();
 
         return new FriendViewHolder(view, getItems());
     }
@@ -39,6 +41,8 @@ public class FirebaseFriendListAdapter extends FirebaseRecyclerAdapter<FriendVie
         Friend friend = getItem(position);
         if(!friend.getUid().equals(currentUserId)) {
             holder.bindUser(getItem(position));
+        } else {
+            mSharedPreferencesEditor.putString("name", friend.getName()).apply();
         }
     }
 

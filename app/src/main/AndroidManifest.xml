@@ -23,7 +23,11 @@
         </activity>
         <activity android:name=".ui.CreateAccountActivity" />
         <activity android:name=".ui.FriendsActivity" />
-        <activity android:name=".ui.ChatActivity"></activity>
+        <activity android:name=".ui.ChatActivity">
+            <meta-data
+                 android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.epicodus.whatsappening.ui.FriendsActivity"/>
+        </activity>
     </application>
 
 </manifest>

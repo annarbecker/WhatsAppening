@@ -6,7 +6,26 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Friend Name"
+        android:id="@+id/friendNameTextView"
+        android:textStyle="bold"
+        android:paddingBottom="3dp"
+        android:textSize="16sp"
+        android:textColor="#000000" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Message from your friend"
-        android:id="@+id/messageTextView"/>
+        android:id="@+id/messageTextView"
+        android:textSize="18sp"
+        android:textColor="#000000" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        android:paddingTop="10dp"
+        android:text="May 6"
+        android:id="@+id/messageTimeTextView"/>
 
 </LinearLayout>
