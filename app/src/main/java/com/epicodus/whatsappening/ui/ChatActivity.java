@@ -39,9 +39,9 @@ public class ChatActivity extends AppCompatActivity{
     @Bind(R.id.messageEditText)
     EditText mMessageEditText;
     private SharedPreferences mSharedPreferences;
-    private Friend mSender;
+    private Friend currentFriend;
     private Firebase mMessagesRef;
-    private String getterId;
+    private String currentUserId;
     private Query currentUserRef;
     private Query friendRef;
     private MessageListAdapter mAdapter;
@@ -57,8 +57,8 @@ public class ChatActivity extends AppCompatActivity{
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mMessagesRef = new Firebase(Constants.FIREBASE_URL_MESSAGES);
         Intent intent = getIntent();
-        mSender = Parcels.unwrap(intent.getParcelableExtra("friend"));
-        getterId = mSharedPreferences.getString(Constants.KEY_UID, null);
+        currentFriend = Parcels.unwrap(intent.getParcelableExtra("friend"));
+        currentUserId = mSharedPreferences.getString(Constants.KEY_UID, null);
         mMessageEditText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if(event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -66,7 +66,7 @@ public class ChatActivity extends AppCompatActivity{
                         case KeyEvent.KEYCODE_DPAD_CENTER:
                         case KeyEvent.KEYCODE_ENTER:
                             String message = mMessageEditText.getText().toString();
-                            Message newMessage = new Message(message, getterId, mSender.getUid());
+                            Message newMessage = new Message(message, currentUserId, currentFriend.getUid());
                             Firebase messageFirebaseRef = new Firebase(Constants.FIREBASE_URL_MESSAGES).push();
                             String pushId = messageFirebaseRef.getKey();
                             newMessage.setId(pushId);
@@ -80,12 +80,11 @@ public class ChatActivity extends AppCompatActivity{
             }
         });
         setUpFirebaseQuery();
-        setUpRecyclerView();
     }
 
     private void setUpFirebaseQuery() {
-        currentUserRef = mMessagesRef.orderByChild("getter").equalTo(getterId);
-        currentUserRef.addValueEventListener(new ValueEventListener() {
+        currentUserRef = mMessagesRef.orderByChild("getter").equalTo(currentUserId);
+        mMessagesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 messages.clear();
@@ -97,7 +96,7 @@ public class ChatActivity extends AppCompatActivity{
                     for(int i = 0; i < gotObjectList.size(); i++) {
                         Log.d("it", "works");
                         Map thisMap = (Map) gotObjectList.get(i);
-                        if(thisMap.get("sender").equals(mSender.getUid())) {
+                        if(thisMap.get("sender").equals(currentFriend.getUid())) {
                             String body = thisMap.get("body").toString();
                             String sender = thisMap.get("sender").toString();
                             String getter = thisMap.get("getter").toString();
@@ -117,8 +116,8 @@ public class ChatActivity extends AppCompatActivity{
             }
         });
 
-        friendRef = mMessagesRef.orderByChild("sender").equalTo(getterId);
-        friendRef.addValueEventListener(new ValueEventListener() {
+        friendRef = mMessagesRef.orderByChild("sender").equalTo(currentUserId);
+        mMessagesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -129,7 +128,7 @@ public class ChatActivity extends AppCompatActivity{
                     for(int i = 0; i < gotObjectList.size(); i++) {
                         Log.d("it", "works");
                         Map thisMap = (Map) gotObjectList.get(i);
-                        if(thisMap.get("getter").equals(mSender.getUid())) {
+                        if(thisMap.get("getter").equals(currentFriend.getUid())) {
                             String body = thisMap.get("body").toString();
                             String sender = thisMap.get("sender").toString();
                             String getter = thisMap.get("getter").toString();
@@ -156,6 +155,7 @@ public class ChatActivity extends AppCompatActivity{
                             return m1.getDate().compareTo(m2.getDate());
                         }
                     });
+                    setUpRecyclerView();
                 }
             }
 
@@ -168,9 +168,16 @@ public class ChatActivity extends AppCompatActivity{
     }
 
     private void setUpRecyclerView() {
-        mAdapter = new MessageListAdapter(this, messages);
-        mMessageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mMessageRecyclerView.setAdapter(mAdapter);
+        ChatActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter = new MessageListAdapter(getApplicationContext(), messages);
+                mMessageRecyclerView.setAdapter(mAdapter);
+                mMessageRecyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+                mMessageRecyclerView.setHasFixedSize(true);
+            }
+        });
+
     }
 
 
