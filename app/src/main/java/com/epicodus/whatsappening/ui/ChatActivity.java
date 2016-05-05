@@ -126,57 +126,6 @@ public class ChatActivity extends AppCompatActivity{
             }
         });
 
-//        friendRef = mMessagesRef.orderByChild("sender").equalTo(currentUserId);
-//        mMessagesRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                Map got = (Map) dataSnapshot.getValue();
-//                if(got != null) {
-//
-//                    List gotObjectList = new ArrayList<>(got.values());
-//                    for(int i = 0; i < gotObjectList.size(); i++) {
-//                        Log.d("it", "works");
-//                        Map thisMap = (Map) gotObjectList.get(i);
-//                        if(thisMap.get("getter").equals(currentFriend.getUid())) {
-//                            String body = thisMap.get("body").toString();
-//                            String sender = thisMap.get("sender").toString();
-//                            String getter = thisMap.get("getter").toString();
-//                            Long dateLong = (Long) thisMap.get("dateCreated");
-//                            Date dateCreated = new Date(dateLong * 1000);
-//                            Log.d("sender getter", sender + " " + getter);
-//                            Message newMessage = new Message(body, sender, getter, dateCreated);
-//                            String messageId = (String) thisMap.get("id");
-//                            newMessage.setId(messageId);
-//                            boolean contains = false;
-//                            if(messages.size() > 0) {
-//                                for(int j = 0; j < messages.size(); j++) {
-//                                    Log.d("message", messages.get(j).getId());
-//                                    if(messages.get(j).getId().equals(thisMap.get("id"))) {
-//                                        contains = true;
-//                                    }
-//                                }
-//                            }
-//                            if(!contains) {
-//                                messages.add(newMessage);
-//                            }
-//                        }
-//                    }
-//                    Collections.sort(messages, new Comparator<Message>() {
-//                        public int compare(Message m1, Message m2) {
-//                            return m1.getDate().compareTo(m2.getDate());
-//                        }
-//                    });
-//                    setUpRecyclerView();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//
-//            }
-//        });
-
     }
 
     private void setUpRecyclerView() {

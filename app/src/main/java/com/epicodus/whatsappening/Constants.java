@@ -14,4 +14,6 @@ public class Constants {
 
     public static final String FIREBASE_LOCATION_MESSAGES = "messages";
     public static final String FIREBASE_URL_MESSAGES = FIREBASE_URL + "/" + FIREBASE_LOCATION_MESSAGES;
+    public static final String KEY_USER_EMAIL = "email";
+
 }
