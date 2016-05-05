@@ -2,9 +2,6 @@
 style friend list w/ pictures?
 in chat:
     format sent and received messages
-    add logout to toolbar
-search widgit for searching friends
-in friends list have message preview
 */
 
 package com.epicodus.whatsappening.ui;

@@ -91,6 +91,8 @@ public class ChatActivity extends AppCompatActivity{
             }
         });
         setUpFirebaseQuery();
+        setUpRecyclerView();
+
     }
 
     private void setUpFirebaseQuery() {
@@ -117,6 +119,7 @@ public class ChatActivity extends AppCompatActivity{
                             String messageId = (String) thisMap.get("id");
                             newMessage.setId(messageId);
                             messages.add(newMessage);
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
                     Collections.sort(messages, new Comparator<Message>() {
@@ -124,7 +127,6 @@ public class ChatActivity extends AppCompatActivity{
                             return m1.getDate().compareTo(m2.getDate());
                         }
                     });
-                    setUpRecyclerView();
                 }
             }
 
@@ -141,6 +143,7 @@ public class ChatActivity extends AppCompatActivity{
         mMessageRecyclerView.setAdapter(mAdapter);
         mMessageRecyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
         mMessageRecyclerView.setHasFixedSize(true);
+        mMessageRecyclerView.smoothScrollToPosition(mAdapter.getItemCount());
     }
 
     @Override

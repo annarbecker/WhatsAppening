@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -48,14 +49,31 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindMessage(Message message) {
+
         mMessageTextView.setText(message.getBody());
         mMessageTimeTextView.setText(message.getDate().toString());
         mFriendNameTextView.setText(mCurrentFriend);
-        if(currentUserId.equals(message.getSender())) {
-            mMessageTextView.setGravity(Gravity.RIGHT);
-            mMessageTimeTextView.setGravity(Gravity.RIGHT);
-            mFriendNameTextView.setText(userName);
-            mFriendNameTextView.setGravity(Gravity.RIGHT);
-        }
+        Log.d("UID", currentUserId);
+//        if(currentUserId.equals(message.getSender())) {
+//            Log.d("fire", message.getSender() + "    " + currentUserId);
+//            mMessageTextView.setGravity(Gravity.RIGHT);
+//            mMessageTimeTextView.setGravity(Gravity.RIGHT);
+//            mFriendNameTextView.setText(userName);
+//            mFriendNameTextView.setGravity(Gravity.RIGHT);
+//        }
     }
+
+    public void bindMessageSender(Message message) {
+        Log.d("SENDER", message.getSender());
+        Log.d("GETTER", message.getGetter());
+
+        mMessageTextView.setText(message.getBody());
+        mMessageTimeTextView.setText(message.getDate().toString());
+        mFriendNameTextView.setText(mCurrentFriend);
+        mMessageTextView.setGravity(Gravity.RIGHT);
+        mMessageTimeTextView.setGravity(Gravity.RIGHT);
+        mFriendNameTextView.setText(userName);
+        mFriendNameTextView.setGravity(Gravity.RIGHT);
+    }
+
 }

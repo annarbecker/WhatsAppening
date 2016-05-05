@@ -1,11 +1,14 @@
 package com.epicodus.whatsappening.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.epicodus.whatsappening.Constants;
 import com.epicodus.whatsappening.R;
 import com.epicodus.whatsappening.models.Friend;
 import com.epicodus.whatsappening.models.Message;
@@ -35,7 +38,13 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageViewHolder> 
 
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
-        holder.bindMessage(mMessages.get(position));
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String uid = sp.getString(Constants.KEY_UID, null);
+        if (mMessages.get(position).getSender().equals(uid)) {
+            holder.bindMessageSender(mMessages.get(position));
+        } else {
+            holder.bindMessage(mMessages.get(position));
+        }
     }
 
     @Override
