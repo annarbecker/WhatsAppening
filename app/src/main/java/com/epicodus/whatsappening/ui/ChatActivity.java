@@ -28,6 +28,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -54,11 +55,13 @@ public class ChatActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
+        messages.clear();
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mMessagesRef = new Firebase(Constants.FIREBASE_URL_MESSAGES);
         Intent intent = getIntent();
         currentFriend = Parcels.unwrap(intent.getParcelableExtra("friend"));
         currentUserId = mSharedPreferences.getString(Constants.KEY_UID, null);
+        Log.d("Current User: ", currentUserId);
         mMessageEditText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if(event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -66,7 +69,7 @@ public class ChatActivity extends AppCompatActivity{
                         case KeyEvent.KEYCODE_DPAD_CENTER:
                         case KeyEvent.KEYCODE_ENTER:
                             String message = mMessageEditText.getText().toString();
-                            Message newMessage = new Message(message, currentUserId, currentFriend.getUid());
+                            Message newMessage = new Message(message, currentUserId, currentFriend.getUid(), new Date());
                             Firebase messageFirebaseRef = new Firebase(Constants.FIREBASE_URL_MESSAGES).push();
                             String pushId = messageFirebaseRef.getKey();
                             newMessage.setId(pushId);
@@ -83,7 +86,6 @@ public class ChatActivity extends AppCompatActivity{
     }
 
     private void setUpFirebaseQuery() {
-        currentUserRef = mMessagesRef.orderByChild("getter").equalTo(currentUserId);
         mMessagesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -96,58 +98,17 @@ public class ChatActivity extends AppCompatActivity{
                     for(int i = 0; i < gotObjectList.size(); i++) {
                         Log.d("it", "works");
                         Map thisMap = (Map) gotObjectList.get(i);
-                        if(thisMap.get("sender").equals(currentFriend.getUid())) {
+                        if((thisMap.get("sender").equals(currentFriend.getUid()) && thisMap.get("getter").equals(currentUserId)) || (thisMap.get("getter").equals(currentFriend.getUid()) && thisMap.get("sender").equals(currentUserId))) {
                             String body = thisMap.get("body").toString();
                             String sender = thisMap.get("sender").toString();
                             String getter = thisMap.get("getter").toString();
+                            Long dateLong = (Long) thisMap.get("dateCreated");
+                            Date dateCreated = new Date(dateLong * 1000);
                             Log.d("sender getter", sender + " " + getter);
-                            Message newMessage = new Message(body, sender, getter);
+                            Message newMessage = new Message(body, sender, getter, dateCreated);
                             String messageId = (String) thisMap.get("id");
                             newMessage.setId(messageId);
                             messages.add(newMessage);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-        friendRef = mMessagesRef.orderByChild("sender").equalTo(currentUserId);
-        mMessagesRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Map got = (Map) dataSnapshot.getValue();
-                if(got != null) {
-
-                    List gotObjectList = new ArrayList<>(got.values());
-                    for(int i = 0; i < gotObjectList.size(); i++) {
-                        Log.d("it", "works");
-                        Map thisMap = (Map) gotObjectList.get(i);
-                        if(thisMap.get("getter").equals(currentFriend.getUid())) {
-                            String body = thisMap.get("body").toString();
-                            String sender = thisMap.get("sender").toString();
-                            String getter = thisMap.get("getter").toString();
-                            Log.d("sender getter", sender + " " + getter);
-                            Message newMessage = new Message(body, sender, getter);
-                            String messageId = (String) thisMap.get("id");
-                            newMessage.setId(messageId);
-                            boolean contains = false;
-                            if(messages.size() > 0) {
-                                for(int j = 0; j < messages.size(); j++) {
-                                    Log.d("message", messages.get(j).getId());
-                                    if(messages.get(j).getId().equals(thisMap.get("id"))) {
-                                        contains = true;
-                                    }
-                                }
-                            }
-                            if(!contains) {
-                                messages.add(newMessage);
-                            }
                         }
                     }
                     Collections.sort(messages, new Comparator<Message>() {
@@ -164,6 +125,57 @@ public class ChatActivity extends AppCompatActivity{
 
             }
         });
+
+//        friendRef = mMessagesRef.orderByChild("sender").equalTo(currentUserId);
+//        mMessagesRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                Map got = (Map) dataSnapshot.getValue();
+//                if(got != null) {
+//
+//                    List gotObjectList = new ArrayList<>(got.values());
+//                    for(int i = 0; i < gotObjectList.size(); i++) {
+//                        Log.d("it", "works");
+//                        Map thisMap = (Map) gotObjectList.get(i);
+//                        if(thisMap.get("getter").equals(currentFriend.getUid())) {
+//                            String body = thisMap.get("body").toString();
+//                            String sender = thisMap.get("sender").toString();
+//                            String getter = thisMap.get("getter").toString();
+//                            Long dateLong = (Long) thisMap.get("dateCreated");
+//                            Date dateCreated = new Date(dateLong * 1000);
+//                            Log.d("sender getter", sender + " " + getter);
+//                            Message newMessage = new Message(body, sender, getter, dateCreated);
+//                            String messageId = (String) thisMap.get("id");
+//                            newMessage.setId(messageId);
+//                            boolean contains = false;
+//                            if(messages.size() > 0) {
+//                                for(int j = 0; j < messages.size(); j++) {
+//                                    Log.d("message", messages.get(j).getId());
+//                                    if(messages.get(j).getId().equals(thisMap.get("id"))) {
+//                                        contains = true;
+//                                    }
+//                                }
+//                            }
+//                            if(!contains) {
+//                                messages.add(newMessage);
+//                            }
+//                        }
+//                    }
+//                    Collections.sort(messages, new Comparator<Message>() {
+//                        public int compare(Message m1, Message m2) {
+//                            return m1.getDate().compareTo(m2.getDate());
+//                        }
+//                    });
+//                    setUpRecyclerView();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//        });
 
     }
 

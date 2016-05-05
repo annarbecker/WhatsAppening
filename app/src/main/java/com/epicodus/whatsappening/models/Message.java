@@ -17,11 +17,11 @@ public class Message {
 
     public Message() {}
 
-    public Message(String body, String sender, String getter) {
+    public Message(String body, String sender, String getter, Date dateCreated) {
         this.body = body;
         this.sender = sender;
         this.getter = getter;
-        this.dateCreated = new Date();
+        this.dateCreated = dateCreated;
     }
 
     public String getGetter() {
