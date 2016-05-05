@@ -1,6 +1,8 @@
 package com.epicodus.whatsappening.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import com.epicodus.whatsappening.Constants;
 import com.epicodus.whatsappening.R;
 import com.epicodus.whatsappening.models.Friend;
+import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
@@ -30,6 +33,10 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     @Bind(R.id.confirmPasswordEditText)
     EditText mConfirmPasswordEditText;
     private Firebase mFirebaseRef;
+    private String uid;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mSharedPreferencesEditor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,9 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         ButterKnife.bind(this);
         mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
         mSignAppButton.setOnClickListener(this);
+
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(CreateAccountActivity.this);
+        mSharedPreferencesEditor = mSharedPreferences.edit();
 
         mConfirmPasswordEditText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -75,9 +85,10 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         mFirebaseRef.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
             @Override
             public void onSuccess(Map<String, Object> result) {
-                String uid = result.get("uid").toString();
+                loginWithPassword();
+                uid = result.get("uid").toString();
                 createUserInFirebaseHelper(name, email, uid);
-                Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
+                Intent intent = new Intent(CreateAccountActivity.this, FriendsActivity.class);
                 startActivity(intent);
             }
 
@@ -122,6 +133,25 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             return false;
         }
         return true;
+    }
+
+    public void loginWithPassword() {
+        final String email = mEmailEditText.getText().toString();
+        String password = mPasswordEditText.getText().toString();
+
+        if (email.equals("")) {
+            mEmailEditText.setError("Please enter your email");
+        }
+        if (password.equals("")) {
+            mPasswordEditText.setError("Password cannot be blank");
+        }
+        mSharedPreferencesEditor.putString(Constants.KEY_USER_EMAIL, email).apply();
+
+        mSharedPreferencesEditor.putString(Constants.KEY_UID, uid).apply();
+        Intent intent = new Intent(CreateAccountActivity.this, FriendsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
 
