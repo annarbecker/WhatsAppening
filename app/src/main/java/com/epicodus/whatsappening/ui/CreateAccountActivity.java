@@ -33,7 +33,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     @Bind(R.id.signAppPasswordEditText) EditText mPasswordEditText;
     @Bind(R.id.confirmPasswordEditText)
     EditText mConfirmPasswordEditText;
-    @Bind(R.id.pictureButton) Button mPictureButton;
     @Bind(R.id.imageView)
     ImageView mImageView;
     private Firebase mFirebaseRef;
@@ -51,7 +50,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
         mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
         mSignAppButton.setOnClickListener(this);
-        mPictureButton.setOnClickListener(this);
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(CreateAccountActivity.this);
         mSharedPreferencesEditor = mSharedPreferences.edit();
