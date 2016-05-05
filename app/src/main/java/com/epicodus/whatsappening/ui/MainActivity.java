@@ -1,7 +1,5 @@
 /*ToDo
-sign up auto logs in user
-style friend list
-don't display users name in friend list
+style friend list w/ pictures?
 in chat:
     format sent and received messages
     show user name

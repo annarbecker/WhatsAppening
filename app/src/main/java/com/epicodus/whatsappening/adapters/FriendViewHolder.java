@@ -2,10 +2,13 @@ package com.epicodus.whatsappening.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.epicodus.whatsappening.Constants;
 import com.epicodus.whatsappening.R;
 import com.epicodus.whatsappening.models.Friend;
 import com.epicodus.whatsappening.ui.ChatActivity;
@@ -24,6 +27,7 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.friendNameTextView) TextView mFriendNameTextView;
     private Context mContext;
     private ArrayList<Friend> mFriends = new ArrayList<>();
+    private String currentUserId;
 
     public FriendViewHolder(View itemView, ArrayList<Friend> friends) {
         super(itemView);
@@ -44,7 +48,6 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindUser(Friend friend) {
-
         mFriendNameTextView.setText(friend.getName());
     }
 }
